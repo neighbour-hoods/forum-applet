@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { AppAgentClient, AppAgentWebsocket } from '@holochain/client';
+import { AdminWebsocket, AppAgentClient, AppAgentWebsocket, AppWebsocket } from '@holochain/client';
 import { provide } from '@lit-labs/context';
 import '@material/mwc-circular-progress';
 
@@ -9,9 +9,23 @@ import { clientContext } from './contexts';
 import './forum/posts/all-posts';
 import { AllPosts } from './forum/posts/all-posts';
 import './forum/posts/create-post';
+import { AppletInfo } from '@neighbourhoods/nh-launcher-applet';
+import { SensemakerStore } from '@neighbourhoods/client';
 
 @customElement('holochain-app')
 export class HolochainApp extends LitElement {
+  @property()
+  appletAppInfo!: AppletInfo[];
+
+  @property()
+  appWebsocket!: AppWebsocket;
+
+  @property()
+  adminWebsocket!: AdminWebsocket;
+
+  @property()
+  sensemakerStore!: SensemakerStore;
+
   @state() loading = true;
 
   @state() result: string | undefined;
@@ -21,7 +35,9 @@ export class HolochainApp extends LitElement {
   client!: AppAgentClient;
 
   async firstUpdated() {
-    this.client = await AppAgentWebsocket.connect(``, 'forum');
+    const url = (this.appWebsocket.client.socket as { url: string }).url;
+    console.log(this.appWebsocket);
+    this.client = await AppAgentWebsocket.connect(url, 'forum');
     
     this.loading = false;
   }
