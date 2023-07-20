@@ -23,7 +23,7 @@ import { AppletInfo, AppletRenderers } from '@neighbourhoods/nh-launcher-applet'
 import { RenderBlock } from "./render-block";
 import { getCellId } from './utils';
 
-const INSTALLED_APP_ID = 'todo-sensemaker';
+const INSTALLED_APP_ID = 'forum';
 
 @customElement('applet-test-harness')
 export class AppletTestHarness extends ScopedElementsMixin(LitElement) {
