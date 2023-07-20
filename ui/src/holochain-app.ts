@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { AdminWebsocket, AppAgentClient, AppAgentWebsocket, AppWebsocket } from '@holochain/client';
+import { AdminWebsocket, AppAgentClient, AppAgentWebsocket, AppWebsocket, CapSecret, encodeHashToBase64 } from '@holochain/client';
 import { provide } from '@lit-labs/context';
 import '@material/mwc-circular-progress';
 import { AppletInfo } from '@neighbourhoods/nh-launcher-applet';
@@ -11,6 +11,7 @@ import { clientContext } from './contexts';
 import './forum/posts/all-posts';
 import { AllPosts } from './forum/posts/all-posts';
 import './forum/posts/create-post';
+import { getCellId } from './utils';
 
 export class HolochainApp extends LitElement {
   @property()
@@ -18,6 +19,9 @@ export class HolochainApp extends LitElement {
 
   @property()
   appWebsocket!: AppWebsocket;
+
+  @property()
+  appAgentWebsocket!: AppAgentWebsocket;
 
   @property()
   adminWebsocket!: AdminWebsocket;
@@ -34,9 +38,22 @@ export class HolochainApp extends LitElement {
   client!: AppAgentClient;
 
   async firstUpdated() {
-    const url = (this.appWebsocket.client.socket as { url: string }).url;
-    const installedAppId = this.appletAppInfo[0].appInfo.installed_app_id;  
-    this.client = await AppAgentWebsocket.connect(url, installedAppId);
+    const appletRoleName = "forum";
+    const todoAppletInfo = this.appletAppInfo[0];
+    const cellInfo = todoAppletInfo.appInfo.cell_info[appletRoleName][0]
+    const cellId = getCellId(cellInfo);
+    // encode cell id to string and console log it
+    console.log("cell id", [encodeHashToBase64(cellId![0]), encodeHashToBase64(cellId![1])]);
+    await this.adminWebsocket.authorizeSigningCredentials(cellId!);
+    const installedCells = todoAppletInfo.appInfo.cell_info;
+    await Promise.all(
+      Object.keys(installedCells).map(roleName => {
+        installedCells[roleName].map(cellInfo => {
+          this.adminWebsocket.authorizeSigningCredentials(getCellId(cellInfo)!);
+        })
+      })
+    );
+    this.client = this.appAgentWebsocket;
     this.loading = false;
   }
   
