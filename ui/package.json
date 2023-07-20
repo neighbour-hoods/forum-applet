@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "scripts": {
     "start": "vite --port $UI_PORT --clearScreen false",
-    "build": "vite build",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
-    "package": "npm run build && cd dist && bestzip ../dist.zip *"
+    "package": "npm run build && cd dist && bestzip ../dist.zip *",
+    "dev": "vite dev --mode development --clearScreen false --port=$UI_PORT",
+    "dev2": "concurrently \"npm run dev & VITE_AGENT=2 vite dev --mode development --clearScreen false --port $UI_PORT_2\"",
+    "build": "vite build --mode production",
+    "package:ui": "rimraf ui.zip && npm run build && cd ./dist && bestzip ../ui.zip index.js icon.png"
   },
   "dependencies": {
     "@holochain/client": "0.12.0",
