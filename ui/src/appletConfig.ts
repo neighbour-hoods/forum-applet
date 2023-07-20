@@ -108,7 +108,7 @@ const appletConfigInput: AppletConfigInput = {
 
 const appletConfig: CreateAppletConfigInput = {
     "applet_config_input": appletConfigInput,
-    "role_name": "todo_lists"
+    "role_name": "forum"
 } 
 
 export  { appletConfig }

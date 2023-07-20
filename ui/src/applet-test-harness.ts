@@ -83,12 +83,12 @@ export class AppletTestHarness extends ScopedElementsMixin(LitElement) {
         await this.initializeSensemakerStore(clonedSMCellId);
         this.loading = false;
       }
-      const todoCellInfo: CellInfo[] = installedCells["todo_lists"];
+      const todoCellInfo: CellInfo[] = installedCells["forum"];
       let todoCellId: CellId;
       if (CellType.Provisioned in todoCellInfo[0]) {
         todoCellId = (todoCellInfo[0][CellType.Provisioned] as ProvisionedCell).cell_id;
       } else {
-        throw new Error("todo_lists cell not provisioned yet")
+        throw new Error("forum cell not provisioned yet")
 
       }
       this.agentPubkey = encodeHashToBase64(todoCellId[1]);
