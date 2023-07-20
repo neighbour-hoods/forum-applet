@@ -35,9 +35,8 @@ export class HolochainApp extends LitElement {
 
   async firstUpdated() {
     const url = (this.appWebsocket.client.socket as { url: string }).url;
-    console.log(this.appWebsocket);
-    this.client = await AppAgentWebsocket.connect(url, 'todo-sensemaker');
-    
+    const installedAppId = this.appletAppInfo[0].appInfo.installed_app_id;  
+    this.client = await AppAgentWebsocket.connect(url, installedAppId);
     this.loading = false;
   }
   
