@@ -16,11 +16,10 @@ import { HolochainApp } from "./holochain-app";
 const todoApplet: NhLauncherApplet = {
   //@ts-ignore
   async appletRenderers(
+    weStore: WeServices,
+    appletAppInfo: AppletInfo[],
     appWebsocket: AppWebsocket,
     appAgentWebsocket: AppAgentWebsocket,
-    adminWebsocket: AdminWebsocket,
-    weStore: WeServices,
-    appletAppInfo: AppletInfo[]
   ): Promise<AppletRenderers> {
     return {
       full(element: HTMLElement, registry: CustomElementRegistry) {
@@ -29,7 +28,6 @@ const todoApplet: NhLauncherApplet = {
         const appletElement = element.querySelector("holochain-app") as any;
         appletElement.appWebsocket = appWebsocket;
         appletElement.appAgentWebsocket = appAgentWebsocket;
-        appletElement.adminWebsocket = adminWebsocket;
         appletElement.appletAppInfo = appletAppInfo;
         appletElement.sensemakerStore = weStore.sensemakerStore;
       },

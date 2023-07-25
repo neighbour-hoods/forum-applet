@@ -58,13 +58,11 @@ export class AppletTestHarness extends ScopedElementsMixin(LitElement) {
     try {
       await this.connectHolochain()
       const installedCells = this.appInfo.cell_info;
-      await Promise.all(
-        Object.keys(installedCells).map(roleName => {
-          installedCells[roleName].map(cellInfo => {
-            this.adminWebsocket.authorizeSigningCredentials(getCellId(cellInfo)!);
-          })
-        })
-      );
+      for (const roleName in installedCells) {
+        for (const cellInfo of installedCells[roleName]) {
+          await this.adminWebsocket.authorizeSigningCredentials(getCellId(cellInfo)!);
+        }
+      }
 
       // mocking what gets passed to the applet
       this.appletInfo = [{
@@ -103,7 +101,7 @@ export class AppletTestHarness extends ScopedElementsMixin(LitElement) {
     const appAgentWebsocket: AppAgentWebsocket = await AppAgentWebsocket.connect(`ws://localhost:${hcPort}`, INSTALLED_APP_ID);
     this._sensemakerStore = new SensemakerStore(appAgentWebsocket, clonedSensemakerRoleName);
     // @ts-ignore
-    this.renderers = await todoApplet.appletRenderers(this.appWebsocket, appAgentWebsocket, this.adminWebsocket, { sensemakerStore: this._sensemakerStore }, this.appletInfo);
+    this.renderers = await todoApplet.appletRenderers({ sensemakerStore: this._sensemakerStore }, this.appletInfo, this.appWebsocket, appAgentWebsocket);
   }
   async cloneSensemakerCell(ca_pubkey: string) {
     const clonedSensemakerCell: ClonedCell = await this.appWebsocket.createCloneCell({

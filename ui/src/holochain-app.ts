@@ -24,9 +24,6 @@ export class HolochainApp extends LitElement {
   appAgentWebsocket!: AppAgentWebsocket;
 
   @property()
-  adminWebsocket!: AdminWebsocket;
-
-  @property()
   sensemakerStore!: SensemakerStore;
 
   @state() loading = true;
@@ -42,17 +39,6 @@ export class HolochainApp extends LitElement {
     const todoAppletInfo = this.appletAppInfo[0];
     const cellInfo = todoAppletInfo.appInfo.cell_info[appletRoleName][0]
     const cellId = getCellId(cellInfo);
-    // encode cell id to string and console log it
-    console.log("cell id", [encodeHashToBase64(cellId![0]), encodeHashToBase64(cellId![1])]);
-    await this.adminWebsocket.authorizeSigningCredentials(cellId!);
-    const installedCells = todoAppletInfo.appInfo.cell_info;
-    await Promise.all(
-      Object.keys(installedCells).map(roleName => {
-        installedCells[roleName].map(cellInfo => {
-          this.adminWebsocket.authorizeSigningCredentials(getCellId(cellInfo)!);
-        })
-      })
-    );
     this.client = this.appAgentWebsocket;
     this.loading = false;
   }

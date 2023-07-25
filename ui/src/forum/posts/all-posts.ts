@@ -54,7 +54,7 @@ export class AllPosts extends LitElement {
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`,
       complete: (records) => this.renderList([...this.signaledHashes, ...records.map(r => r.signed_action.hashed.hash)]),
-      error: (e: any) => html`<span>Error fetching the posts: ${e.data.data}.</span>`
+      error: (e: any) => html`<span>Error fetching the posts: ${e}.</span>`
     });
   }
 }
