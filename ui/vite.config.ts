@@ -6,17 +6,17 @@ export default defineConfig(({ mode }) => {
 
   return isProduction ? {
     plugins: [
-      {
-        name: 'copy-assets',
-        apply: 'build',
-        generateBundle() {
-          this.emitFile({
-            type: 'asset',
-            fileName: 'icon.png',
-            source: require('fs').readFileSync('icon.png'),
-          });
-        },
-      },
+      // {
+      //   name: 'copy-assets',
+      //   apply: 'build',
+      //   generateBundle() {
+      //     this.emitFile({
+      //       type: 'asset',
+      //       fileName: 'icon.png',
+      //       source: require('fs').readFileSync('icon.png'),
+      //     });
+      //   },
+      // },
     ],
     build: {
       lib: {
