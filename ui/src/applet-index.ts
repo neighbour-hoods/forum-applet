@@ -26,10 +26,7 @@ const todoApplet: NhLauncherApplet = {
         registry.define("holochain-app", HolochainApp);
         element.innerHTML = `<holochain-app></holochain-app>`;
         const appletElement = element.querySelector("holochain-app") as any;
-        appletElement.appWebsocket = appWebsocket;
-        appletElement.appAgentWebsocket = appAgentWebsocket;
-        appletElement.appletAppInfo = appletAppInfo;
-        appletElement.sensemakerStore = weStore.sensemakerStore;
+        appletElement.client = appAgentWebsocket;
       },
       blocks: [],
     };
